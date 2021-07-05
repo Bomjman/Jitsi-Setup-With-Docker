@@ -45,7 +45,7 @@ We will install Jitsi Meet, Jibri for recording, streming and Jigasi for transcr
    #+begin_src bash
 cp env.example .env
    #+end_src
-3. Set strong passwords in the security section options of .env file by running the following bash script [[*Run It][section]]
+3. Set strong passwords in the security section options of .env file by running the following bash script 
    #+begin_src bash
 ./gen-passwords.sh
    #+end_src
@@ -54,7 +54,7 @@ cp env.example .env
 mkdir -p ~/.jitsi-meet-cfg/{web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
    #+end_src
 
-5. Run docker-compose up -d if you want to ran Jibri and Jigase look this 
+5. Run docker-compose up -d if you want to ran Jibri and Jigase look this [[#Run It][section]]
 6. Access the web UI at https://localhost:8443 (or a different port, in case you edited the compose file).
 
 ** Jigasi
