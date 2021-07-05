@@ -54,7 +54,7 @@ cp env.example .env
 mkdir -p ~/.jitsi-meet-cfg/{web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
    #+end_src
 
-5. Run docker-compose up -d if you want to ran Jibri and Jigase look this [[#Run It][section]]
+5. Run docker-compose up -d if you want to ran Jibri and Jigase look this [[#Runing][section]]
 6. Access the web UI at https://localhost:8443 (or a different port, in case you edited the compose file).
 
 ** Jigasi
@@ -117,7 +117,7 @@ JIBRI_RECORDING_DIR=/config/recordings
 
 NOTE: you need a real domain with valid ssl for https and rename all 'meet.jitsi' your domain name or disable https in the .env file
 
-** Run It
+** Runing
 For start just run docker compose
 #+begin_src bash
 docker-compose -f docker-compose.yml -f jigasi.yml -f jibri.yml up -d
