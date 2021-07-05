@@ -1,0 +1,124 @@
+#+title: Jitsi Setup With Docker
+
+* Introduction
+The installation was testing on Ubuntu 20.04 AWS.
+
+* Installing Docker and Docker Compose
+** Docker
+First, update your existing list of packages:
+#+begin_src bash
+sudo apt update
+#+end_src
+Next, install a few prerequisite packages which let apt use packages over HTTPS:
+#+begin_src bash
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+#+end_src
+Then add the GPG key for the official Docker repository to your system:
+#+begin_src bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#+end_src
+Add the Docker repository to APT sources:
+#+begin_src bash
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+#+end_src
+Next, update the package database with the Docker packages from the newly added repo:
+#+begin_src bash
+sudo apt update
+#+end_src
+Finally, install Docker:
+#+begin_src bash
+sudo apt install docker-ce
+#+end_src
+
+** Docker Compose:
+Just install Docker Compose via apt:
+#+begin_src bash
+sudo apt-get install docker-compose
+#+end_src
+
+* Jitsi Insatlation
+We will install Jitsi Meet, Jibri for recording, streming and Jigasi for transcription
+
+** Jitsi Meet
+1. Download and extract the [[https://github.com/jitsi/docker-jitsi-meet/releases/latest][latest release]]. DO NOT clone the git repository. See below if you are interested in running test images.
+2. Create a .env file by copying and adjusting env.example:
+   #+begin_src bash
+cp env.example .env
+   #+end_src
+3. Set strong passwords in the security section options of .env file by running the following bash script
+   #+begin_src bash
+./gen-passwords.sh
+   #+end_src
+4. Create required CONFIG directories
+   #+begin_src bash
+mkdir -p ~/.jitsi-meet-cfg/{web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
+   #+end_src
+
+ 5. Run docker-compose up -d if you want to ran Jibri and Jigase look this [[Run it][section]]
+ 6. Access the web UI at https://localhost:8443 (or a different port, in case you edited the compose file).
+
+** Jigasi
+We need configure a SIP gateway to the .env file
+#+begin_example
+JIGASI_SIP_URI=test@sip2sip.info
+JIGASI_SIP_PASSWORD=passw0rd
+JIGASI_SIP_SERVER=sip2sip.info
+JIGASI_SIP_PORT=5060
+JIGASI_SIP_TRANSPORT=UDP
+#+end_example
+
+*** Add transcription:
+**** Method 1 (uncomment this lines)
+For setting the Google Cloud Credentials please read https://cloud.google.com/text-to-speech/docs/quickstart-protocol section "Before you begin" paragraph 1 to 5.
+#+begin_example
+ENABLE_TRANSCRIPTIONS=1
+GC_PROJECT_ID=
+GC_PRIVATE_KEY_ID=
+GC_PRIVATE_KEY=
+#+end_example
+**** Method 2
+Just add your credentials json file in $CONFIG/jigasi/key.json after docker compose up
+
+** Jibri
+*** Installing snd-aloop module
+NOTE: If you are running on AWS you may need to reboot your machine to use the generic kernel instead of the "aws" kernel. If after reboot, your machine is still using the "aws" kernel, you'll need to manually update the grub file. So just run:
+#+begin_example
+# open the grub file in editor
+nano /etc/default/grub
+# Modify the value of GRUB_DEFAULT from "0" to "1>2"
+# Save and exit from file
+
+# Update grub
+update-grub
+# Reboot the machine
+reboot now
+#+end_example
+
+Before running Jibri, you need to set up an ALSA loopback device on the host.
+#begin_example
+# install the module
+apt update && apt install linux-image-extra-virtual
+# configure 5 capture/playback interfaces
+echo "options snd-aloop enable=1,1,1,1,1 index=0,1,2,3,4" > /etc/modprobe.d/alsa-loopback.conf
+# setup autoload the module
+echo "snd-aloop" >> /etc/modules
+# check that the module is loaded
+lsmod | grep snd_aloop
+#+end_example
+
+*** Configure Jibri
+Uncomment this lines in the .env file
+#+begin_example
+ENABLE_RECORDING=1
+XMPP_RECORDER_DOMAIN=recorder.meet.jitsi
+JIBRI_RECORDER_USER=recorder
+JIBRI_RECORDING_DIR=/config/recordings
+#end_example
+
+NOTE: you need a real domain with valid ssl for https and rename all 'meet.jitsi' your domain name or disable https in the .env file
+
+** Run It
+For start just run docker compose
+#+begin_src bash
+docker-compose -f docker-compose.yml -f jigasi.yml -f jibri.yml up -d
+#+end_src
