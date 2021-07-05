@@ -54,8 +54,8 @@ cp env.example .env
 mkdir -p ~/.jitsi-meet-cfg/{web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
    #+end_src
 
-5. Run docker-compose up -d if you want to ran Jibri and Jigase look this [[#Runing][section]]
-6. Access the web UI at https://localhost:8443 (or a different port, in case you edited the compose file).
+5. Run =docker-compose up -d= if you want to ran Jibri and Jigase look this [[#Runing][section]]
+6. Access the web UI at =https://localhost:8443= (or a different port, in case you edited the compose file).
 
 ** Jigasi
 We need configure a SIP gateway to the .env file
@@ -95,7 +95,7 @@ reboot now
 #+end_example
 
 Before running Jibri, you need to set up an ALSA loopback device on the host.
-#begin_example
+#+begin_example
 # install the module
 apt update && apt install linux-image-extra-virtual
 # configure 5 capture/playback interfaces
