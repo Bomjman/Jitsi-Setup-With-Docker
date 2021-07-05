@@ -60,7 +60,7 @@ mkdir -p ~/.jitsi-meet-cfg/{web/letsencrypt,transcripts,prosody/config,prosody/p
 6. Access the web UI at =https://localhost:8443= (or a different port, in case you edited the compose file).
 
 ** Jigasi
-We need configure a SIP gateway in .env file
+We need configure a SIP gateway in the .env file
 #+begin_example
 JIGASI_SIP_URI=test@sip2sip.info
 JIGASI_SIP_PASSWORD=passw0rd
@@ -109,7 +109,7 @@ lsmod | grep snd_aloop
 #+end_example
 
 *** Configure Jibri
-Uncomment this lines in .env file
+Uncomment this lines in the .env file
 #+begin_example
 ENABLE_RECORDING=1
 XMPP_RECORDER_DOMAIN=recorder.meet.jitsi
