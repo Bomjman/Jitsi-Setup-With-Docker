@@ -80,6 +80,10 @@ GC_PRIVATE_KEY=
 #+end_example
 **** Method 2
 Just replace your credentials json file in $CONFIG/jigasi/key.json after docker compose up
+#+begin_src bash
+cd ~/.jitsi-meet-cfg/jigasi/
+sudo cp your-credentials.json key.json
+#+end_src
 
 ** Jibri
 *** Installing snd-aloop module
@@ -94,6 +98,8 @@ nano /etc/default/grub
 update-grub
 # Reboot the machine
 reboot now
+# make sure that you use a generic kenel
+uname -r
 #+end_example
 
 Before running Jibri, you need to set up an ALSA loopback device on the host.
@@ -117,7 +123,7 @@ JIBRI_RECORDER_USER=recorder
 JIBRI_RECORDING_DIR=/config/recordings
 #+end_example
 
-NOTE: you need a real domain with valid ssl for https and rename all 'meet.jitsi' to your domain name or disable https in .env file
+NOTE: you need a real domain with valid ssl for https and repalce all 'meet.jitsi' to your domain name
 
 ** Running
 For start just run docker compose
