@@ -30,7 +30,7 @@ Finally, install Docker:
 sudo apt install docker-ce
 #+end_src
 
-** Docker Compose:
+** Docker Compose
 Just install Docker Compose via apt:
 #+begin_src bash
 sudo apt-get install docker-compose
