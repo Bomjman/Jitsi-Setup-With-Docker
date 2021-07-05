@@ -54,7 +54,9 @@ cp env.example .env
 mkdir -p ~/.jitsi-meet-cfg/{web/letsencrypt,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
    #+end_src
 
-5. Run =docker-compose up -d= if you want to run Jibri and Jigasi look this [[#Runing][section]]
+5. Unccomment this line and replace to your domain or ip =PUBLIC_URL=https://my-ip.example=
+   Run =docker-compose up -d= 
+   or if you want to run Jibri and Jigasi look this [[#Runing][section]]
 6. Access the web UI at =https://localhost:8443= (or a different port, in case you edited the compose file).
 
 ** Jigasi
