@@ -85,6 +85,8 @@ cd ~/.jitsi-meet-cfg/jigasi/
 sudo cp your-credentials.json key.json
 #+end_src
 
+Note: after restarting the Jigasi container, you should do that again, becouse the key.json file was overwritten.
+
 ** Jibri
 *** Installing snd-aloop module
 NOTE: If you are running on AWS you may need to reboot your machine to use the generic kernel instead of the "aws" kernel. If after reboot, your machine is still using the "aws" kernel, you'll need to manually update the grub file. So just run:
@@ -130,3 +132,35 @@ For start just run docker compose
 #+begin_src bash
 docker-compose -f docker-compose.yml -f jigasi.yml -f jibri.yml up -d
 #+end_src
+
+** JWT Authentication
+To enable it you have to enable authentication with =ENABLE_AUTH= and set =AUTH_TYPE= to jwt in the env file.
+#+begin_example
+ENABLE_AUTH=1
+AUTH_TYPE=JWT
+JWT_APP_SECRET=my_jitsi_app_id
+JWT_APP_SECRET=my_jitsi_app_secret
+#+end_example
+
+After the changes, restart your containers.
+
+Then we need generate a jwt token on the jwt.io site. For instance, use the following sample payload:
+
+#+begin_example
+{
+  "context": {
+    "user": {
+      "avatar": "https://robohash.org/john-doe",
+      "name": "John Doe",
+      "email": "jdoe@example.com"
+    }
+  },
+  "aud": "my_jitsi_app_id",
+  "iss": "my_jitsi_app_id",
+  "sub": "meet.jitsi",
+  "room": "*"
+}
+#+end_example
+
+In the =VERIFY SIGNATURE= field, enter your =my_jitsi_app_secret=.
+Copy the ready token, it's will work on your-domain.example/any-room?jwt=paste-you-token-here
